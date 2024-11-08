@@ -5,7 +5,7 @@
 #ifndef SIM_H
 #define SIM_H
 #include <vector>
-
+#include <time.h>
 #include "Atomo.h"
 using namespace std;
 #include <iostream>
@@ -20,7 +20,9 @@ class Sim {
     int na, nd, nc, ncp, nci;
     double dt, L, d, r, v0, temp, dens, rc;
     double dis[3], f;
+    string cuad;
     vector <Atomo*> atomos;
+    double et, ec, ei;
 
     int prin();
     void Datos();
@@ -28,11 +30,13 @@ class Sim {
 
     void IniciarAtomos();
     void EscribirPosVel();
+    void Prop();
 
     void Simulacion();
     void Aceleraciones();
     double LJ(double r);
     double Dist (int i, int j);
+    void Cuadrada();
 
     protected:
 

@@ -48249,7 +48249,9 @@ class Sim {
     int na, nd, nc, ncp, nci;
     double dt, L, d, r, v0, temp, dens, rc;
     double dis[3], f;
+    string cuad;
     vector <Atomo*> atomos;
+    double et, ec, ei;
 
     int prin();
     void Datos();
@@ -48257,16 +48259,18 @@ class Sim {
 
     void IniciarAtomos();
     void EscribirPosVel();
+    void Prop();
 
     void Simulacion();
     void Aceleraciones();
     double LJ(double r);
     double Dist (int i, int j);
+    void Cuadrada();
 
     protected:
 
     private:
-# 63 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.h"
+# 67 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.h"
 };
 # 5 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/main.cpp" 2
 
