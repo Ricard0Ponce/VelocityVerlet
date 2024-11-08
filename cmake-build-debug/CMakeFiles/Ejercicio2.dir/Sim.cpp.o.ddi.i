@@ -5,10 +5,6 @@
 # 1 "/usr/include/stdc-predef.h" 1 3 4
 # 0 "<línea-de-órdenes>" 2
 # 1 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp"
-
-
-
-
 # 1 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.h" 1
 
 
@@ -48258,7 +48254,7 @@ class Sim {
     private:
 # 67 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.h"
 };
-# 6 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp" 2
+# 2 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp" 2
 # 1 "/usr/include/c++/14.2.0/math.h" 1 3
 # 36 "/usr/include/c++/14.2.0/math.h" 3
 # 1 "/usr/include/c++/14.2.0/cmath" 1 3
@@ -59026,11 +59022,11 @@ using std::tgamma;
 using std::trunc;
 # 183 "/usr/include/c++/14.2.0/math.h" 3
 using std::lerp;
-# 7 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp" 2
+# 3 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp" 2
 
 
 
-# 9 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp"
+# 5 "/home/rich/Escritorio/NotasFC/VelocityVerlet/Ejercicio2/Sim.cpp"
 Sim::Sim()
 {
 
@@ -59050,13 +59046,15 @@ int Sim::prin()
     Datos();
     EscribirDatos();
     IniciarAtomos();
-    if(cuad == "cuad") {
+
+    if (cuad == "cuad"){
         Cuadrada();
     }
 
 
     Aceleraciones();
     Simulacion();
+
     double pp;
     return 0;
 }
@@ -59069,23 +59067,21 @@ void Sim::Datos()
      temp = 1.0;
      dens = 0.65;
 
-
     na = 216;
     nd = 3;
     nc = 1000;
+
     cuad = "cuad";
+
     dt = 0.001;
     d= 1.0;
     L = pow((na/ dens),1.0/nd);
     r = d / 2.0;
     rc = 3.0;
-
-
-    v0 = 1.5 * sqrt(temp * nd / 2.0);
+    v0 = 1.5 * sqrt(temp * nd/2.0);
 
     ncp =10;
     nci = nc / ncp;
-
 
 }
 
@@ -59110,7 +59106,9 @@ void Sim :: EscribirDatos() {
                     << d << " "
                         << r << endl;
 
-    cout << "v0 rc" << v0 << " "
+    cout << "cuad " << cuad << endl;
+
+    cout << "v0, rc" << v0 << " "
                 << rc << endl;
     cout << "ncp,nci " << ncp << " " << nci << endl;
 
@@ -59160,10 +59158,10 @@ void Sim::EscribirPosVel() {
     cout << endl;
     cout << "Posiciones y velocidades iniciales" << endl;
     for(int ia=0; ia < na; ia ++ ) {
-        cout << "ia " << ia << endl;
+        cout << "ia " << ia << " ";
         for(int id = 0; id < nd; id ++ ) {
             double pi = atomos[ia] -> p[id];
-            cout << pi << " " << endl;
+            cout << pi << " ";
         }
         for (int id = 0; id < nd; id++ ) {
             double vi = atomos[ia] -> v[id];
@@ -59174,12 +59172,11 @@ void Sim::EscribirPosVel() {
 }
 
 void Sim ::Simulacion() {
-
-
+    cout << endl;
+    cout << "Sim::Simulacion " << endl;
 
     double pp, dttt, ti, tf;
-    ti = clock();
-    dttt = (tf-ti) / 1000;
+    ti= clock();
 
 
 
@@ -59189,8 +59186,7 @@ void Sim ::Simulacion() {
 
             for(int id = 0; id < nd; id ++ ) {
                 pp = atomos[ia] -> p[id] +
-                    dt * atomos[ia] -> v[id] +
-                        dt * dt * atomos[ia] -> a[id] * 0.5;
+                    dt * atomos[ia] -> v[id] + dt * dt * atomos[ia] -> a[id] * 0.5;
 
                 if(pp > L) pp = pp - L;
                 if(pp < 0) pp = pp + L;
@@ -59201,41 +59197,40 @@ void Sim ::Simulacion() {
 
 
 
-        for (int ia = 0; ia < na; ia ++) {
-            for (int id = 0; id < na; id ++) {
-                atomos[ia] -> v[id] =
-                    atomos[ia] -> v[id] + dt *
-                        atomos[ia] -> a[id] / 2.0;
-            }
+        for (int ia=0; ia< na; ia++){
+                for (int id=0; id< nd; id++){
+                    atomos[ia] -> v[id]=
+                    atomos[ia] -> v[id] +
+                    dt * atomos[ia] -> a[id]/2.0;
+                }
+
         }
 
 
-       Aceleraciones();
+        Aceleraciones();
 
 
-        for (int ia = 0; ia < na; ia ++) {
-            for (int id = 0; id < nd; id ++) {
-                atomos[ia] -> v[id] =
-                    atomos[ia] -> v[id] + dt *
-                        atomos[ia] -> a[id] / 2.0;
-            }
+        for (int ia=0; ia< na; ia++){
+                for (int id=0; id< nd; id++){
+                    atomos[ia] -> v[id]=atomos[ia] -> v[id] + dt * atomos[ia] -> a[id]/2.0;
+
+                }
+
+
+        }
+
+        if(ic==0){
+            cout << " temp, dens, et, ec, ei, dttt " <<endl;
         }
 
 
-        if(ic == 0) {
-            cout << "ic, temp, dens, et, ec, ei, dttt" << endl;
-        }
 
         if(ic % nci == 0) {
             Prop();
-            tf = clock();
-            dttt = (tf - ti) / 1000.;
-
-            cout << ic << " "
-            << temp << " " << dens << " "
-            << et << " " << ec << " "
-            << ei << " "
-            << dttt << endl;
+            tf= clock();
+            dttt= (tf- ti) / 1000.;
+            cout << temp << " "<< dens << " "<< et << " "<< ec << " "<< ei << " "<< dttt << " " << " ";
+            cout << ic << " " << endl;
         }
     }
 
@@ -59251,8 +59246,7 @@ void Sim::Aceleraciones() {
         }
     }
 
-    double u=0.0;
-
+    double u=0;
     for (int ia = 0; ia < na - 1; ia++) {
         for (int ja = ia+1; ja < na; ja++) {
             double r = Dist(ia,ja);
@@ -59262,8 +59256,8 @@ void Sim::Aceleraciones() {
             atomos[ia] -> a[id] =
                 atomos[ia] -> a[id] + f * dis[id] / r ;
             atomos[ja] -> a[id] =
-                atomos[ja] -> a[id] - f * dis[id] / r ;
-            }
+                atomos[ja] -> a[id]- f * dis[id] / r ;
+        }
         }
     }
 }
@@ -59279,8 +59273,9 @@ double Sim::LJ(double r) {
         (pow((1.0/r),12 ) -
             pow((1.0 / r),6));
 
-     f = 24 * (2.0* pow((1.0/r),12) -
-         pow((1.0/r),6))/r;
+    f = 24.0 *
+        (2.0 * pow((1.0/r),12 )-
+            pow((1.0 / r),6))/r;
 
 
     return (u);
@@ -59290,9 +59285,7 @@ double Sim::LJ(double r) {
 double Sim:: Dist (int i, int j) {
 
 
-    double r;
-
-    r=0.0;
+    double r=0;
 
     for(int id = 0; id < nd; id++) {
         dis[id] = atomos[i] -> p[id] -
@@ -59300,7 +59293,7 @@ double Sim:: Dist (int i, int j) {
 
         if(fabs(dis [id]) > L / 2) {
             dis[id] = dis[id] -
-                fabs(dis[id]) * L;
+                fabs(dis[id]) / dis[id] * L;
         }
 
        r = r + dis[id] * dis[id];
@@ -59308,58 +59301,70 @@ double Sim:: Dist (int i, int j) {
     r = sqrt(r);
 
     return (r);
+
+
+
 }
 
 
+void Sim:: Cuadrada() {
+    cout << endl;
+    cout << "Sim:: Cuadrada "<< endl;
+
+    int nl= L;
+    double dl= L/nl;
+    double x, y, z;
+    int ia = 0;
 
 
-void Sim::Cuadrada() {
-
-
-    int nl = L;
-    double dl = L / nl;
-    double x,y,z;
-    int ia =0;
-    for(int iz = 0; iz < nl; iz ++) {
+    for(int iz=0; iz< nl; iz++){
         z = iz * dl;
 
-        for(int iy = 0; iy < nl; iy ++) {
-            y = iz * dl;
-
-            for(int ix = 0; ix < nl; ix ++) {
-                x = iz * dl;
-                atomos[ia]-> p[0] = x;
-                atomos[ia]-> p[1] = y;
-                atomos[ia]-> p[2] = z;
+        for(int iy=0; iy< nl; iy++){
+            y = iy * dl;
+            for(int ix=0; ix< nl; ix++){
+                x = ix * dl;
+                atomos[ia]-> p[0]=x;
+                atomos[ia]-> p[1]=y;
+                atomos[ia]-> p[2]=z;
                 ia++;
-
             }
         }
-        if(nd == 2) break;
 
+        if (nd==2) break;
     }
+
+
 }
 
-void Sim::Prop() {
+void Sim:: Prop() {
 
 
-    et = ec = ei = 0;
 
-    for(int ia = 0; ia < na; ia++) {
-        for(int id = 0; id < nd; id++) {
-            double vi = atomos[ia] -> v[id];
-            ec = ec + vi * vi * 0.5;
+
+    et=ec=ei=0;
+    for(int ia = 0 ; ia<na; ia++){
+        for (int id=0 ; id< nd; id++){
+            double vi = atomos [ia] -> v[id];
+
+            ec=ec + vi * vi * 0.5;
         }
-        ec = ec / na;
+    }
+        ec = ec/na;
 
-        for(int ia = 0; ia < na - 1; ia++) {
-            for(int ib = ia + 1; ib < na; ib++) {
-                double r = Dist(ia, ib);
+
+
+        for(int ia = 0; ia< na-1; ia++){
+            for(int ib = ia+1; ib< na; ib++){
+                double r= Dist(ia, ib);
+
                 ei = ei + LJ(r);
+
             }
         }
+
+        ei = ei / na;
+
+        et = ec + ei;
+        temp = ec * 2.0 / nd ;
     }
-    ei = ei / na;
-    et = ec+ ei;
-    temp = ec *2.0 / nd;
-}
